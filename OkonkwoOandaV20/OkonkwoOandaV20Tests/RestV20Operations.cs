@@ -48,7 +48,7 @@ namespace OkonkwoOandaV20Tests
       static string AccountId { get { return Credentials.GetDefaultCredentials().DefaultAccountId; } }
 
       [ClassInitialize]
-      public static async void RunApiOperations(TestContext context)
+      public static async Task RunApiOperations(TestContext context)
       {
          try
          {
