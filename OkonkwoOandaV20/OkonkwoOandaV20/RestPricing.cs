@@ -1,8 +1,8 @@
-﻿using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
-using OkonkwoOandaV20.TradeLibrary.DataTypes.Pricing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Pricing;
 
 namespace OkonkwoOandaV20
 {

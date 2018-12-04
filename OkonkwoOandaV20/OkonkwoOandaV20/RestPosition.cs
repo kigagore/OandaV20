@@ -1,8 +1,8 @@
-﻿using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
 using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications.Requests;
 using OkonkwoOandaV20.TradeLibrary.DataTypes.Position;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OkonkwoOandaV20
 {

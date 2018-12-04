@@ -1,10 +1,10 @@
-﻿using OkonkwoOandaV20.TradeLibrary.DataTypes.Account;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Account;
 using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
 using OkonkwoOandaV20.TradeLibrary.DataTypes.Instrument;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace OkonkwoOandaV20
 {

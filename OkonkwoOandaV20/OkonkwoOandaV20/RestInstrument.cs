@@ -1,7 +1,7 @@
-﻿using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
-using OkonkwoOandaV20.TradeLibrary.DataTypes.Instrument;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Communications;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Instrument;
 
 namespace OkonkwoOandaV20
 {

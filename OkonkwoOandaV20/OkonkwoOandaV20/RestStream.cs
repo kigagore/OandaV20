@@ -1,9 +1,9 @@
-﻿using OkonkwoOandaV20.TradeLibrary.DataTypes.Instrument;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using OkonkwoOandaV20.TradeLibrary.DataTypes.Instrument;
 
 namespace OkonkwoOandaV20
 {
