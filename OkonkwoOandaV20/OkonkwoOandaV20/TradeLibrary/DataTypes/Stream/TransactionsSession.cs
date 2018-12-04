@@ -12,7 +12,7 @@ namespace OkonkwoOandaV20.TradeLibrary.DataTypes.Communications
 
       protected override async Task<WebResponse> GetSession()
       {
-         return await Rest20.StartTransactionsSession(_accountId);
+         return await Rest20.StartTransactionsSession(AccountId);
       }
    }
 }

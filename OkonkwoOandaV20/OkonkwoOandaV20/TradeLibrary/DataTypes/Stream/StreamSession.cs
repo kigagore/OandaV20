@@ -3,81 +3,75 @@ using OkonkwoOandaV20.TradeLibrary.DataTypes.Stream;
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OkonkwoOandaV20.TradeLibrary.DataTypes.Communications
 {
-   public abstract class StreamSession<T> where T : IHeartbeat
-   {
-      protected readonly string _accountId;
-      protected WebResponse _response;
-      protected bool _shutdown;
+    public abstract class StreamSession<T> where T : IHeartbeat
+    {
+        protected readonly string AccountId;
+        protected WebResponse Response;
 
-      public delegate void DataHandler(T data);
-      public event DataHandler DataReceived;
-      public void OnDataReceived(T data)
-      {
-         DataHandler handler = DataReceived;
-         if (handler != null) handler(data);
-      }
-      public delegate void SessionStatusHandler(string accountId, bool started, Exception e);
-      public event SessionStatusHandler SessionStatusChanged;
-      public void OnSessionStatusChanged(bool started, Exception e)
-      {
-         SessionStatusHandler handler = SessionStatusChanged;
-         if (handler != null) handler(_accountId, started, e);
-      }
+        private CancellationTokenSource _cancellationTokenSource;
 
-      protected StreamSession(string accountId)
-      {
-         _accountId = accountId;
-      }
+        public delegate void DataHandler(T data);
+        public event DataHandler DataReceived;
+        public void OnDataReceived(T data)
+        {
+            DataReceived?.Invoke(data);
+        }
+        public delegate void SessionStatusHandler(string accountId, bool started, Exception e);
+        public event SessionStatusHandler SessionStatusChanged;
+        public void OnSessionStatusChanged(bool started, Exception e)
+        {
+            SessionStatusChanged?.Invoke(AccountId, started, e);
+        }
 
-      protected abstract Task<WebResponse> GetSession();
+        protected StreamSession(string accountId)
+        {
+            AccountId = accountId;
+        }
 
-      public virtual async Task StartSession()
-      {
-         _shutdown = false;
-         _response = await GetSession();
+        protected abstract Task<WebResponse> GetSession();
 
-         await Task.Run(() =>
-         {
-            try
+        public virtual async Task StartSession()
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            var ct = _cancellationTokenSource.Token;
+            Response = await GetSession();
+
+            await Task.Run(() =>
             {
-               using (_response)
-               {
-                  StreamReader reader = new StreamReader(_response.GetResponseStream());
-                  while (!_shutdown)
-                  {
-                     string line = reader.ReadLine();
-                     var data = JsonConvert.DeserializeObject<T>(line);
+                try
+                {
+                    ct.ThrowIfCancellationRequested();
+                    using (Response)
+                    {
+                        var stream = Response.GetResponseStream();
+                        if(stream == null) return;
+                        StreamReader reader = new StreamReader(stream);
+                        while (!ct.IsCancellationRequested)
+                        {
+                            string line = reader.ReadLine();
+                            var data = JsonConvert.DeserializeObject<T>(line);
 
-                     OnSessionStatusChanged(!_shutdown, null);
+                            OnSessionStatusChanged(true, null);
 
-                     OnDataReceived(data);
-                  }
-               }
-            }
-            catch (Exception e)
-            {
-               _shutdown = true;
-               throw e;
-            }
-            finally
-            {
-               _response = null;
-            }
-         });
-      }
+                            OnDataReceived(data);
+                        }
+                    }
+                }
+                finally
+                {
+                    Response = null;
+                }
+            }, ct);
+        }
 
-      public void StopSession()
-      {
-         _shutdown = true;
-      }
-
-      public bool Stopped()
-      {
-         return _shutdown;
-      }
-   }
+        public void StopSession()
+        {
+            _cancellationTokenSource?.Cancel();
+        }
+    }
 }

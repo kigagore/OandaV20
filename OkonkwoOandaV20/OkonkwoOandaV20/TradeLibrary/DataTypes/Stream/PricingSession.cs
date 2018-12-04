@@ -18,7 +18,7 @@ namespace OkonkwoOandaV20.TradeLibrary.DataTypes.Communications
 
       protected override async Task<WebResponse> GetSession()
       {
-         return await Rest20.StartPricingSession(_accountId, _instruments, _snapshot);
+         return await Rest20.StartPricingSession(AccountId, _instruments, _snapshot);
       }
    }
 }
